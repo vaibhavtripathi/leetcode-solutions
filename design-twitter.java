@@ -1,9 +1,3 @@
-/*
-This code does not pass one test case. See
-https://leetcode.com/problems/design-twitter/discuss/393227/User-can-follow-self!
-for details.
-*/
-
 class Tweet implements Comparable<Tweet> {
     public int tweetId;
     public int clockTime;
@@ -21,7 +15,7 @@ class Tweet implements Comparable<Tweet> {
 
 class Twitter {
     private int clock = 0;
-    private Map<Integer, List<Integer>> followedBy;
+    private Map<Integer, Set<Integer>> followedBy;
     private Map<Integer, List<Tweet>> tweetsByUser;
 
     /** Initialize your data structure here. */
@@ -50,7 +44,7 @@ class Twitter {
         }
         if (followedBy.containsKey(userId)) {
             for (Integer user : followedBy.get(userId)) {
-                if (tweetsByUser.containsKey(user)) {
+                if (tweetsByUser.containsKey(user) && user != userId) {
                     resultTweets.addAll(tweetsByUser.get(user));
                 }
             }
@@ -80,7 +74,7 @@ class Twitter {
         if (followedBy.containsKey(followerId)) {
             followedBy.get(followerId).add(followeeId);
         } else {
-            List<Integer> followees = new LinkedList<>();
+            Set<Integer> followees = new TreeSet<>();
             followees.add(followeeId);
             followedBy.put(followerId, followees);
         }
